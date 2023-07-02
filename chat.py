@@ -318,7 +318,7 @@ def main(context, session) -> None:
 
     # Session from CLI
     if session is not None:
-        loaded["name"] = session.name
+        loaded["name"] = os.path.basename(session.name).strip(".json")
         loaded["messages"] = json.loads(session.read())
 
     # Initialize chat bot
