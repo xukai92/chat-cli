@@ -4,6 +4,8 @@ Heavily inspired by https://github.com/marcolardera/chatgpt-cli
 
 ## Usage
 
+Command line interface
+
 ```sh
 ❯ python chat.py --help
 Usage: chat.py [OPTIONS]
@@ -13,6 +15,8 @@ Options:
   -s, --session FILENAME  Filepath of a dialog session file
   --help                  Show this message and exit.
 ```
+
+Commands in chat mode
 
 ```
 ❯ python chat.py
