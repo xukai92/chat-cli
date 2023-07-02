@@ -270,7 +270,7 @@ class ConsoleChatBot():
 
 @click.command()
 @click.option(
-    "-c", "--context", "context", type=click.File("r"), help="Path to a system context file"
+    "-c", "--context", "context", help="_Name_ of system context in the config file", default="default"
 )
 @click.option(
     "-s", "--session", "session", type=click.File("r"), help="Path to a dialog session file"
@@ -306,13 +306,15 @@ def main(context, session) -> None:
     # Load context/session
     loaded = {}
 
-    # Context from CLI or config file
-    if context is not None:
-        loaded["name"] = context.name
-        loaded["messages"] = [{"role": "system", "content": context.read().strip()}]
-    elif "context" in config and config["context"] != "":
-        loaded["name"] = "default"
-        loaded["messages"] = [{"role": "system", "content": config["context"]}]
+    # Context config file
+    if "contexts" in config:
+        if context not in config["contexts"]:
+            print(f"Context {context} not found in the config file ({config_filepath}). Using default.")
+            context = "default"
+        loaded["name"] = context
+        loaded["messages"] = [{"role": "system", "content": config["contexts"][context]}]
+    else:
+        print(f"No contexts section found in the config file ({config_filepath}). Starting without context.")
 
     # Session from CLI
     if session is not None:
