@@ -280,6 +280,7 @@ def main(context, session) -> None:
 
     # Load config file
     config = None
+    config_filepath = None
     for config_filepath in CONFIG_FILEPATHS:
         file_exists = os.path.isfile(config_filepath)
         if file_exists:
@@ -294,7 +295,7 @@ def main(context, session) -> None:
     api_key = os.environ.get("OAI_SECRET_KEY", config.get("api_key"))
 
     if api_key is None:
-        print("API key not found. Please set it in the config file or via environment variable `OAI_SECRET_KEY` (higher priority).")
+        print(f"API key not found. Please set it in the config file ({config_filepath}) or via environment variable `OAI_SECRET_KEY` (higher priority).")
         sys.exit(1)
     if not api_key.startswith("sk-"):
         print('API key incorrect. Please make sure it starts with "sk-".')
