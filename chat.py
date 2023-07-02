@@ -38,9 +38,9 @@ Help / TL;DR
 - `/d [1]`: **d**isplay previous response
 - `/p [1]`: previous response in **p**lain text
 - `/md [1]`: previous response in **M**ark**d**own
-- `/s filename`: **s**ave current session to `filename`
-- `/l filename`: **l**oad `filename` and start a new session
-- `/L filename`: **l**oad `filename` (permanently) and start a new session
+- `/s filepath`: **s**ave current session to `filepath`
+- `/l filepath`: **l**oad `filepath` and start a new session
+- `/L filepath`: **l**oad `filepath` (permanently) and start a new session
 """
 
 CONFIG_FILENAME = "chat-cli.toml"
@@ -153,18 +153,18 @@ class ConsoleChatBot():
     def _handle_save_session(self, content):
         cs = content.split()
         if len(cs) < 2:
-            self._sys_print(Markdown("**WARNING**: The second argument `filename` is missing in the `\s filename` command."))
+            self._sys_print(Markdown("**WARNING**: The second argument `filepath` is missing in the `\s filepath` command."))
             raise KeyboardInterrupt
         filepath = cs[1]
         with open(filepath, "w") as outfile:
-            json.dump(self.info["messages"], outfile)
+            json.dump(self.info["messages"], outfile, indent=4)
         raise KeyboardInterrupt
 
     def _handle_load_session(self, content):
         self.display_expense()
         cs = content.split()
         if len(cs) < 2:
-            self._sys_print(Markdown("**WARNING**: The second argument `filename` is missing in the `\l filename` or `\L filename` command."))
+            self._sys_print(Markdown("**WARNING**: The second argument `filepath` is missing in the `\l filepath` or `\L filepath` command."))
             raise KeyboardInterrupt
         filepath = cs[1]
         with open(filepath, "r") as session:
