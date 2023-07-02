@@ -8,6 +8,9 @@ Command line interface
 
 ```sh
 ❯ python chat.py --help
+```
+
+```
 Usage: chat.py [OPTIONS]
 
 Options:
@@ -18,8 +21,11 @@ Options:
 
 Commands in chat mode
 
-```
+```sh
 ❯ python chat.py
+```
+
+```
 ╭────────────────────────────── system ──────────────────────────────╮
 │ Welcome to ChatGPT CLI (type /h for help)                          │
 ╰────────────────────────────────────────────────────────────────────╯
