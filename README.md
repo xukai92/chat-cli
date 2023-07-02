@@ -2,8 +2,8 @@
 
 ## Prerequsites
 
-1. Copy `chat-cli.toml` to `~/.chat-cli.toml` or `~/.config/chat-cli.toml`
-2. Update `api_key` in the file
+1. Copy `chat-cli.toml` to `~/.config/chat-cli.toml` (or `~/.chat-cli.toml`)
+2. Update `api_key` in the file ([guide](https://help.openai.com/en/articles/4936850-where-do-i-find-my-secret-api-key) to get the key)
 
 ## Usage
 
