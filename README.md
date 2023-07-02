@@ -1,6 +1,6 @@
 # Chat CLI
 
-Heavily inspired by https://github.com/marcolardera/chatgpt-cli
+**Prerequsite**: Copy `chat-cli.toml` to `~/.chat-cli.toml` or `~/.config/chat-cli.toml` and update `api_key` in the file
 
 ## Usage
 
@@ -19,7 +19,7 @@ Options:
   --help                  Show this message and exit.
 ```
 
-Commands in chat mode
+Start chatting
 
 ```sh
 ❯ python chat.py
@@ -29,7 +29,14 @@ Commands in chat mode
 ╭────────────────────────────── system ──────────────────────────────╮
 │ Welcome to ChatGPT CLI (type /h for help)                          │
 ╰────────────────────────────────────────────────────────────────────╯
+```
+
+Commands in chat
+```
 >>> /h                                                 [0][S][default]
+```
+
+```
 ╭────────────────────────────── system ──────────────────────────────╮
 │ Help / TL;DR                                                       │
 │                                                                    │
@@ -49,3 +56,8 @@ Commands in chat mode
 │    session                                                         │
 ╰────────────────────────────────────────────────────────────────────╯
 ```
+
+## Acknowledgements
+
+- Heavily inspired by https://github.com/marcolardera/chatgpt-cli
+- Tested by Pinzhen and Bing
