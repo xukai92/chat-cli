@@ -1,10 +1,13 @@
 # Chat CLI
 
-**Prerequsite**: Copy `chat-cli.toml` to `~/.chat-cli.toml` or `~/.config/chat-cli.toml` and update `api_key` in the file
+## Prerequsites
+
+1. Copy `chat-cli.toml` to `~/.chat-cli.toml` or `~/.config/chat-cli.toml`
+2. Update `api_key` in the file
 
 ## Usage
 
-Command line interface
+### Command line interface
 
 ```sh
 ❯ python chat.py --help
@@ -19,7 +22,7 @@ Options:
   --help                  Show this message and exit.
 ```
 
-Start chatting
+### Start chatting
 
 ```sh
 ❯ python chat.py
@@ -31,7 +34,7 @@ Start chatting
 ╰────────────────────────────────────────────────────────────────────╯
 ```
 
-Commands in chat
+### Commands in chat
 ```
 >>> /h                                                 [0][S][default]
 ```
