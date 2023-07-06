@@ -56,6 +56,8 @@ PRICING_RATE = {
     "gpt-4-32k":     {"prompt": 0.06,  "completion": 0.12},
 }
 
+PROMPT_PREFIX = ">>> "
+
 class ConsoleChatBot():
 
     def __init__(self, model, vi_mode=False, vertical_overflow="ellipsis", loaded={}):
@@ -193,7 +195,7 @@ class ConsoleChatBot():
             self.info["messages"] if role == "user" else [message]
         )
 
-    def start_prompt(self):
+    def start_prompt(self, content=None):
         
         handlers = {
             "/q":  self._handle_quit,
@@ -208,7 +210,8 @@ class ConsoleChatBot():
             "/l":  self._handle_load_session,
         }
 
-        content = self.input.prompt(">>> ", rprompt=self._right_prompt, vi_mode=True, multiline=self.multiline)
+        if content is None:
+            content = self.input.prompt(PROMPT_PREFIX, rprompt=self._right_prompt, vi_mode=True, multiline=self.multiline)
 
         # Handle empty
         if content.strip() == "":
@@ -267,15 +270,20 @@ class ConsoleChatBot():
         # Update message history and token counters
         self._update_conversation(response_content.plain, "assistant")
 
-
 @click.command()
+@click.argument(
+    "question", nargs=-1, type=click.UNPROCESSED
+)
 @click.option(
     "-c", "--context", "context", help="Name of system context in config file", default="default"
 )
 @click.option(
     "-s", "--session", "session", help="Filepath of a dialog session file", type=click.File("r")
 )
-def main(context, session) -> None:
+@click.option(
+    "-qq", "--quick-question", "qq", help="Exist after answering question", is_flag=True
+)
+def main(question, context, session, qq) -> None:
     assert (context is None) or (session is None), "Cannot load context and session in the same time"
 
     # Load config file
@@ -317,6 +325,7 @@ def main(context, session) -> None:
         print(f"No contexts section found in the config file ({config_filepath}). Starting without context.")
 
     # Session from CLI
+    # TODO Print history in session when loaded
     if session is not None:
         loaded["name"] = os.path.basename(session.name).strip(".json")
         loaded["messages"] = json.loads(session.read())
@@ -327,18 +336,31 @@ def main(context, session) -> None:
                          vertical_overflow=("visible" if config.get("visible_overflow", False) else "ellipsis"), 
                          loaded=loaded)
 
-    # Run the display expense function when exiting the script
-    atexit.register(ccb.display_expense)
+    if not qq:
+        # Greet
+        ccb.greet(help=True)
 
-    # Greet and start chatting
-    ccb.greet(help=True)
-    while True:
-        try:
-            ccb.start_prompt()
-        except KeyboardInterrupt:
-            continue
-        except EOFError:
-            break
+    # Use the input question to start with
+    if len(question) > 0:
+        question = ' '.join(question)
+        print(f"{PROMPT_PREFIX}{question}")
+        ccb.start_prompt(question)
+
+    if not qq:
+        # Run the display expense function when exiting the script
+        atexit.register(ccb.display_expense)
+
+        # Start chatting
+        while True:
+            try:
+                ccb.start_prompt()
+            except KeyboardInterrupt:
+                continue
+            except EOFError:
+                break
+    else:
+        # TODO Autosave session in QQ mode
+        pass
 
 
 if __name__ == "__main__":
