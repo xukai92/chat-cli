@@ -275,6 +275,9 @@ class ConsoleChatBot():
     "question", nargs=-1, type=click.UNPROCESSED
 )
 @click.option(
+    "-m", "--model", "model", help="Model to use"
+)
+@click.option(
     "-c", "--context", "context", help="Name of system context in config file", default="default"
 )
 @click.option(
@@ -283,7 +286,7 @@ class ConsoleChatBot():
 @click.option(
     "-qq", "--quick-question", "qq", help="Exist after answering question", is_flag=True
 )
-def main(question, context, session, qq) -> None:
+def main(question, model, context, session, qq) -> None:
     assert (context is None) or (session is None), "Cannot load context and session in the same time"
 
     # Load config file
@@ -331,7 +334,7 @@ def main(question, context, session, qq) -> None:
         loaded["messages"] = json.loads(session.read())
 
     # Initialize chat bot
-    ccb = ConsoleChatBot(config["model"], 
+    ccb = ConsoleChatBot(config["model"] if model is None else model, 
                          vi_mode=config.get("vi_mode", False), 
                          vertical_overflow=("visible" if config.get("visible_overflow", False) else "ellipsis"), 
                          loaded=loaded)
