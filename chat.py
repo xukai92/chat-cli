@@ -86,7 +86,7 @@ class ConsoleChatBot():
 
     def greet(self, help=False, new=False, session_name="new session"):
         side_info_str = (" (type `/h` for help)" if help else "") + (f" ({session_name})" if new else "")
-        self._sys_print(Markdown("Welcome to Chat CLI" + side_info_str))
+        self._sys_print(Markdown(f"Welcome to Chat CLI w/ **{self.model.upper()}**" + side_info_str))
 
     def display_expense(self):
         total_expense = calculate_expense(
