@@ -50,6 +50,8 @@ CONFIG_FILEPATHS = [
     os.path.expanduser(f"~/.config/{CONFIG_FILENAME}"),
 ]
 
+PROMPT_HISTORY_FILEPATH = os.path.expanduser("~/.local/chat-cli.history")
+
 PRICING_RATE = {
     "gpt-3.5-turbo":     {"prompt": 0.0015, "completion": 0.002},
     "gpt-3.5-turbo-16k": {"prompt": 0.003,  "completion": 0.004},
@@ -69,7 +71,7 @@ class ConsoleChatBot():
         self.loaded = loaded
 
         self.console = Console()
-        self.input = PromptSession(history=FileHistory(".history"))
+        self.input = PromptSession(history=FileHistory(PROMPT_HISTORY_FILEPATH))
         self.multiline = False
         self.multiline_mode = 0
 
