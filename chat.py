@@ -33,6 +33,7 @@ Help / TL;DR
 - `/a model`: **a**mend **a**ssistant
 - `/m`: toggle **m**ultiline (for the next session only)
 - `/M`: toggle **m**ultiline
+- `/model model`: change **model** to model
 - `/n`: **n**ew session
 - `/N`: **n**ew session (ignoring loaded)
 - `/d [1]`: **d**isplay previous response
@@ -61,6 +62,7 @@ PRICING_RATE = {
 
 PROMPT_PREFIX = ">>> "
 
+# TODO Autosave chat history
 class ConsoleChatBot():
 
     def __init__(self, model, vi_mode=False, vertical_overflow="ellipsis", loaded={}):
@@ -132,6 +134,15 @@ class ConsoleChatBot():
         self.multiline = not self.multiline
         self.multiline_mode = 1 if not temp else 2
         raise KeyboardInterrupt
+    
+    def _handle_model(self, content):
+        cs = content.split()
+        if len(cs) < 2:
+            self._sys_print(Markdown("**WARNING**: The second argument `model` is missing in the `\model model` command."))
+            raise KeyboardInterrupt
+        self.model = cs[1]
+        self.greet(new=True)
+        raise KeyboardInterrupt
 
     def _handle_new_session(self, content):
         hard = content == "/N"  # hard new ignores loaded context/session
@@ -201,16 +212,17 @@ class ConsoleChatBot():
     def start_prompt(self, content=None):
         
         handlers = {
-            "/q":  self._handle_quit,
-            "/h":  self._handle_help,
-            "/a":  self._handle_amend_assistant,
-            "/m":  self._handle_multiline,
-            "/n":  self._handle_new_session,
-            "/d":  self._handle_display,
-            "/p":  self._handle_plain,
-            "/md": self._handle_markdown,
-            "/s":  self._handle_save_session,
-            "/l":  self._handle_load_session,
+            "/q":      self._handle_quit,
+            "/h":      self._handle_help,
+            "/a":      self._handle_amend_assistant,
+            "/m":      self._handle_multiline,
+            "/model":  self._handle_model,
+            "/n":      self._handle_new_session,
+            "/d":      self._handle_display,
+            "/p":      self._handle_plain,
+            "/md":     self._handle_markdown,
+            "/s":      self._handle_save_session,
+            "/l":      self._handle_load_session,
         }
 
         if content is None:
