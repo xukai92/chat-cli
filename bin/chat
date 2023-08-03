@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+$HOME/mambaforge/envs/chat/bin/python $HOME/src/chat-cli/chat.py $@
