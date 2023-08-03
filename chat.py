@@ -30,10 +30,9 @@ HELP_MD = """
 Help / TL;DR
 - `/q`: **q**uit
 - `/h`: show **h**elp
-- `/a model`: **a**mend **a**ssistant
+- `/a model`: **a**mend model
 - `/m`: toggle **m**ultiline (for the next session only)
 - `/M`: toggle **m**ultiline
-- `/model model`: change **model** to model
 - `/n`: **n**ew session
 - `/N`: **n**ew session (ignoring loaded)
 - `/d [1]`: **d**isplay previous response
@@ -122,25 +121,20 @@ class ConsoleChatBot():
         self._sys_print(Markdown(HELP_MD))
         raise KeyboardInterrupt
 
-    def _handle_amend_assistant(self, content):
-        self.display_expense()
-        self.model = content[3:]
-        self._reset_session()
-        self.greet(new=True)
-        raise KeyboardInterrupt
-
     def _handle_multiline(self, content):
         temp = content == "/m" # soft multilien only for next prompt
         self.multiline = not self.multiline
         self.multiline_mode = 1 if not temp else 2
         raise KeyboardInterrupt
     
-    def _handle_model(self, content):
+    def _handle_amend(self, content):
+        self.display_expense()
         cs = content.split()
         if len(cs) < 2:
             self._sys_print(Markdown("**WARNING**: The second argument `model` is missing in the `\model model` command."))
             raise KeyboardInterrupt
         self.model = cs[1]
+        self._reset_session()
         self.greet(new=True)
         raise KeyboardInterrupt
 
@@ -214,9 +208,8 @@ class ConsoleChatBot():
         handlers = {
             "/q":      self._handle_quit,
             "/h":      self._handle_help,
-            "/a":      self._handle_amend_assistant,
+            "/a":      self._handle_amend,
             "/m":      self._handle_multiline,
-            "/model":  self._handle_model,
             "/n":      self._handle_new_session,
             "/d":      self._handle_display,
             "/p":      self._handle_plain,
