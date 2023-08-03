@@ -14,11 +14,13 @@
 ```
 
 ```
-Usage: chat.py [OPTIONS]
+Usage: chat.py [OPTIONS] [QUESTION]...
 
 Options:
+  -m, --model TEXT        Model to use
   -c, --context TEXT      Name of system context in config file
   -s, --session FILENAME  Filepath of a dialog session file
+  -qq, --quick-question   Exist after answering question
   --help                  Show this message and exit.
 ```
 
@@ -29,35 +31,34 @@ Options:
 ```
 
 ```
-╭────────────────────────────── system ──────────────────────────────╮
-│ Welcome to ChatGPT CLI (type /h for help)                          │
-╰────────────────────────────────────────────────────────────────────╯
+╭───────────────────────────────────────── system ─────────────────────────────────────────╮
+│ Welcome to Chat CLI w/ GPT-3.5-TURBO (type /h for help)                                  │
+╰──────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
 ### Commands in chat
 ```
->>> /h                                                 [0][S][default]
+>>> /h                                                                       [0][S][default]
 ```
 
 ```
-╭────────────────────────────── system ──────────────────────────────╮
-│ Help / TL;DR                                                       │
-│                                                                    │
-│  • /q: quit                                                        │
-│  • /h: show help                                                   │
-│  • /a model: amend assistant                                       │
-│  • /m: toggle multiline (for the next session only)                │
-│  • /M: toggle multiline                                            │
-│  • /n: new session                                                 │
-│  • /N: new session (ignoring loaded)                               │
-│  • /d [1]: display previous response                               │
-│  • /p [1]: previous response in plain text                         │
-│  • /md [1]: previous response in Markdown                          │
-│  • /s filepath: save current session to filepath                   │
-│  • /l filepath: load filepath and start a new session              │
-│  • /L filepath: load filepath (permanently) and start a new        │
-│    session                                                         │
-╰────────────────────────────────────────────────────────────────────╯
+╭───────────────────────────────────────── system ─────────────────────────────────────────╮
+│ Help / TL;DR                                                                             │
+│                                                                                          │
+│  • /q: quit                                                                              │
+│  • /h: show help                                                                         │
+│  • /a model: amend model                                                                 │
+│  • /m: toggle multiline (for the next session only)                                      │
+│  • /M: toggle multiline                                                                  │
+│  • /n: new session                                                                       │
+│  • /N: new session (ignoring loaded)                                                     │
+│  • /d [1]: display previous response                                                     │
+│  • /p [1]: previous response in plain text                                               │
+│  • /md [1]: previous response in Markdown                                                │
+│  • /s filepath: save current session to filepath                                         │
+│  • /l filepath: load filepath and start a new session                                    │
+│  • /L filepath: load filepath (permanently) and start a new session                      │
+╰──────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
 ## Acknowledgements
