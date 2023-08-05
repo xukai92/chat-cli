@@ -30,7 +30,8 @@ HELP_MD = """
 Help / TL;DR
 - `/q`: **q**uit
 - `/h`: show **h**elp
-- `/a model`: **a**mend model
+- `/a assistant`: **a**mend **a**ssistant
+- `/c context`: **c**hange **c**ontext
 - `/m`: toggle **m**ultiline (for the next session only)
 - `/M`: toggle **m**ultiline
 - `/n`: **n**ew session
@@ -44,6 +45,7 @@ Help / TL;DR
 """
 
 CONFIG_FILENAME = "chat-cli.toml"
+CONTEXTS = None
 
 CONFIG_FILEPATHS = [
     os.path.expanduser(f"~/.{CONFIG_FILENAME}"),
@@ -131,9 +133,25 @@ class ConsoleChatBot():
         self.display_expense()
         cs = content.split()
         if len(cs) < 2:
-            self._sys_print(Markdown("**WARNING**: The second argument `model` is missing in the `\model model` command."))
+            self._sys_print(Markdown("**WARNING**: The second argument `assistant` is missing in the `/a assistant` command."))
             raise KeyboardInterrupt
         self.model = cs[1]
+        self._reset_session()
+        self.greet(new=True)
+        raise KeyboardInterrupt
+    
+    def _handle_context(self, content):
+        if CONTEXTS is None:
+            self._sys_print(Markdown("**WARNING**: No contexts loaded from the config file."))
+            raise KeyboardInterrupt
+        self.display_expense()
+        cs = content.split()
+        if len(cs) < 2:
+            self._sys_print(Markdown("**WARNING**: The second argument `context` is missing in the `/c context` command."))
+            raise KeyboardInterrupt
+        context = cs[1]
+        self.loaded["name"] = context
+        self.loaded["messages"] = [{"role": "system", "content": CONTEXTS[context]}]
         self._reset_session()
         self.greet(new=True)
         raise KeyboardInterrupt
@@ -163,7 +181,7 @@ class ConsoleChatBot():
     def _handle_save_session(self, content):
         cs = content.split()
         if len(cs) < 2:
-            self._sys_print(Markdown("**WARNING**: The second argument `filepath` is missing in the `\s filepath` command."))
+            self._sys_print(Markdown("**WARNING**: The second argument `filepath` is missing in the `/s filepath` command."))
             raise KeyboardInterrupt
         filepath = cs[1]
         with open(filepath, "w") as outfile:
@@ -174,7 +192,7 @@ class ConsoleChatBot():
         self.display_expense()
         cs = content.split()
         if len(cs) < 2:
-            self._sys_print(Markdown("**WARNING**: The second argument `filepath` is missing in the `\l filepath` or `\L filepath` command."))
+            self._sys_print(Markdown("**WARNING**: The second argument `filepath` is missing in the `/l filepath` or `/L filepath` command."))
             raise KeyboardInterrupt
         filepath = cs[1]
         with open(filepath, "r") as session:
@@ -209,6 +227,7 @@ class ConsoleChatBot():
             "/q":      self._handle_quit,
             "/h":      self._handle_help,
             "/a":      self._handle_amend,
+            "/c":      self._handle_context,
             "/m":      self._handle_multiline,
             "/n":      self._handle_new_session,
             "/d":      self._handle_display,
@@ -328,11 +347,13 @@ def main(question, model, context, session, qq) -> None:
 
     # Context config file
     if "contexts" in config:
+        global CONTEXTS
+        CONTEXTS = config["contexts"]
         if context not in config["contexts"]:
             print(f"Context {context} not found in the config file ({config_filepath}). Using default.")
             context = "default"
         loaded["name"] = context
-        loaded["messages"] = [{"role": "system", "content": config["contexts"][context]}]
+        loaded["messages"] = [{"role": "system", "content": CONTEXTS[context]}]
     else:
         print(f"No contexts section found in the config file ({config_filepath}). Starting without context.")
 
