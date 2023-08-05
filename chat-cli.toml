@@ -6,3 +6,4 @@ visible_overflow = true
 [contexts]
 # Default context used by OpenAI
 default = "You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible."
+cli_helper = "You are an expert for command line interface and know all common commands. Answer the command to execute as it without any explanation."

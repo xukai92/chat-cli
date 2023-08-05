@@ -203,7 +203,7 @@ class ConsoleChatBot():
             self.info["messages"] if role == "user" else [message]
         )
 
-    def start_prompt(self, content=None):
+    def start_prompt(self, content=None, box=True):
         
         handlers = {
             "/q":      self._handle_quit,
@@ -266,14 +266,15 @@ class ConsoleChatBot():
             raise
 
         response_content = Text()
-        panel = Panel(response_content, title=self.model, subtitle_align="right")
+        panel = Panel(response_content, title=self.model, subtitle_align="right") if box else response_content
         with Live(panel, console=self.console, refresh_per_second=5, vertical_overflow=self.vertical_overflow) as live:
             start_time = time.time()
             for chunk in response:
                 chunk_message = chunk['choices'][0]['delta']
                 if 'content' in chunk_message:
                     response_content.append(chunk_message['content'])
-                panel.subtitle = f"elapsed {time.time() - start_time:.3f} seconds"
+                if box:
+                    panel.subtitle = f"elapsed {time.time() - start_time:.3f} seconds"
 
         # Update message history and token counters
         self._update_conversation(response_content.plain, "assistant")
@@ -354,8 +355,8 @@ def main(question, model, context, session, qq) -> None:
     # Use the input question to start with
     if len(question) > 0:
         question = ' '.join(question)
-        print(f"{PROMPT_PREFIX}{question}")
-        ccb.start_prompt(question)
+        if not qq: print(f"{PROMPT_PREFIX}{question}")
+        ccb.start_prompt(question, box=(not qq))
 
     if not qq:
         # Run the display expense function when exiting the script
