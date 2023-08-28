@@ -342,6 +342,14 @@ def main(question, model, context, session, qq) -> None:
 
     openai.api_key = api_key
 
+    proxy = {}
+    proxy_http = os.environ.get("OAI_PROXY_HTTP", config.get("proxy_http"))
+    if proxy_http is not None: proxy["http"] = proxy_http
+    proxy_https = os.environ.get("OAI_PROXY_HTTPS", config.get("proxy_https"))
+    if proxy_https is not None: proxy["https"] = proxy_https
+    if len(proxy) > 0:
+        openai.proxy = proxy
+
     # Load context/session
     loaded = {}
 
