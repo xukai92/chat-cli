@@ -114,6 +114,7 @@ class ConsoleChatBot():
         ('#85bb65 bold', f"[{self._total_tokens}]"), # dollar green for tokens
         ('#3f7cac bold', f"[{'M' if self.multiline else 'S'}]"), # info blue for multiple
         *([('bold', f"[{self.loaded['name']}]")] if "name" in self.loaded else []), # loaded context/session file
+        *([] if openai.proxy is None else [('#d08770 bold', "proxied")]), # indicate prox
     ])
 
     def _handle_quit(self, content):
