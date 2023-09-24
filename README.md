@@ -61,6 +61,19 @@ Options:
 ╰──────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
+### ACL: Ask Command Line
+
+1. Make `./bin/ask-cl` in from your PATH
+2. `ask-cl some natural langauge` will convert the natural language to the command line
+3. Optionally, if you are using the Fish shell, add below to your config file
+```fish
+function acl
+    set cmd (ask-cl $argv)
+    commandline -i $cmd
+end
+```
+and you can use `acl some natural langauge` which will do the same AND copy paste the command to your shell for you.
+
 ## Acknowledgements
 
 - Heavily inspired by https://github.com/marcolardera/chatgpt-cli
