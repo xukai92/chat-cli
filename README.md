@@ -63,16 +63,25 @@ Options:
 
 ### ACL: Ask Command Line
 
-1. Make `./bin/ask-cl` in from your PATH
+1. Make `./bin/chat` and `./bin/ask-cl` avaiable from your PATH (e.g. by making symlinks)
 2. `ask-cl some natural langauge` will convert the natural language to the command line
 3. Optionally, if you are using the Fish shell, add below to your config file
 ```fish
 function acl
-    set cmd (ask-cl $argv)
+    if isatty stdin
+        set cmd (ask-cl $argv)
+    else
+        read -l -z pipin
+        set cmd (echo $pipin | ask-cl $argv)
+    end
     commandline -i $cmd
 end
 ```
-and you can use `acl some natural langauge` which will do the same AND copy paste the command to your shell for you.
+and you can use `acl some natural langauge` which will do the same *AND* copy paste the command to your shell for you.
+4. Both `ask-cl` or `acl` accepts stdin so you can pipe commands to them, e.g.
+``` fish
+ls | acl back up the TOML file with a prefix "old"
+```
 
 ## Acknowledgements
 
