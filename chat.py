@@ -66,7 +66,7 @@ PROMPT_PREFIX = ">>> "
 # TODO Autosave chat history
 class ConsoleChatBot():
 
-    def __init__(self, model, vi_mode=False, vertical_overflow="ellipsis", loaded={}):
+    def __init__(self, model, vi_mode=False, prompt=True, vertical_overflow="ellipsis", loaded={}):
         
         self.model = model
         self.vi_mode = vi_mode
@@ -74,7 +74,7 @@ class ConsoleChatBot():
         self.loaded = loaded
 
         self.console = Console()
-        self.input = PromptSession(history=FileHistory(PROMPT_HISTORY_FILEPATH))
+        self.input = PromptSession(history=FileHistory(PROMPT_HISTORY_FILEPATH)) if prompt else None
         self.multiline = False
         self.multiline_mode = 0
 
@@ -370,7 +370,8 @@ def main(question, model, context, session, qq) -> None:
 
     # Initialize chat bot
     ccb = ConsoleChatBot(config["model"] if model is None else model, 
-                         vi_mode=config.get("vi_mode", False), 
+                         vi_mode=config.get("vi_mode", False),
+                         prompt=not qq,
                          vertical_overflow=("visible" if config.get("visible_overflow", False) else "ellipsis"), 
                          loaded=loaded)
 
