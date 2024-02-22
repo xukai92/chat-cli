@@ -330,6 +330,10 @@ def main(question, model, context, session, qq) -> None:
     if config is None:
         print(f"Config file not found. Please copy {CONFIG_FILENAME} from the repo to any path in {CONFIG_FILEPATHS}.")
         sys.exit(1)
+
+    api_base = config.get("api_base")
+    if api_base is not None:
+        openai.api_base = api_base
     
     # Read API key
     api_key = os.environ.get("OAI_SECRET_KEY", config.get("api_key"))

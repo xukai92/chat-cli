@@ -6,7 +6,8 @@ if [ ! -t 0 ]; then
 <cmdout>
 $input
 </cmdout>
-Now give the command for the query: $@"
+Now give the command for the query: $@
+Please return the command only without any explanantion."
 else
   q="$@"
 fi
